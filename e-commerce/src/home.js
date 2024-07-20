@@ -1,14 +1,10 @@
 import React, { useState ,useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useAuth from './useAuth'
 
-const Home = (props) => {
-  const { loggedIn, username } = props
+const Home = () => {
+  const {loggedIn, username} = useAuth()
   const navigate = useNavigate()
-
-  useEffect(()=>{
-    const loggedIn = localStorage.getItem('loggedIn')
-    const storedUsername = localStorage.getItem('username')
-  }, [navigate, props])
 
   const onButtonClick = () => {
     // You'll update this function later
