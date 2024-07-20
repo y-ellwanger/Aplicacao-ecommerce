@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from './useAuth'
 
@@ -7,7 +7,6 @@ const Home = () => {
   const navigate = useNavigate()
 
   const onButtonClick = () => {
-    // You'll update this function later
     loggedIn? navigate('/logout') : navigate('/login')
   }
 
@@ -24,7 +23,7 @@ const Home = () => {
           onClick={onButtonClick}
           value={loggedIn ? 'Log out' : 'Log in'}
         />
-        {loggedIn ? <div>Your username is {username}</div> : <div />}
+        {loggedIn && <div>Your username is {username}</div>}
       </div>
     </div>
   )

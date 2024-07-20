@@ -40,31 +40,21 @@ def register():
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    print("-------------- Info -----------\n",data)
-
     if data["password"] and data["username"]:
         user = collection.find_one({"username": data["username"]})
-        print("--------------DB ----------------------",user)
         if user and bcrypt.check_password_hash(user["password"], data["password"]):
-            #session["user_id"] = str(user["_id"])
+            session["user_id"] = str(user["_id"])
             return jsonify({"message": "Login successful"}), 200
         else: return jsonify({"message": "Invalid username or password"}), 401
     else: return jsonify({"message": "Username and password required"}), 400
 
 @app.route("/logout")
 def logout():
-    try:
-        session.pop("user_id",None)
-        return True
-    except Exception as err:
-        return err
-    
-@app.route("/profile")
-def profile():
     if "user_id" in session:
-        user = collection.find_one({"_id": ObjectId(session["user_id"])})
-        return jsonify({"username": user["username"], "cart": user["cart"]}), 200
-    return False
+        session.pop("user_id",None)
+        return jsonify({"message": "Logout sucessful"}), 200
+    else: return jsonify({"message": "User was not logged in"}), 401
+
 
 if __name__ == "__main__":
     app.run(debug=True)

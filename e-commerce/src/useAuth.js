@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 const useAuth = () =>{
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [username, setUsername] = useState('')
-    const navigate = useNavigate()
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [username, setUsername] = useState('')
+  const navigate = useNavigate()
 
   useEffect(()=>{
     const storedLoggedIn = localStorage.getItem('loggedIn') === 'true'
@@ -12,4 +13,8 @@ const useAuth = () =>{
     setUsername(storedUsername || '')
   }, [])
 
+  return {loggedIn, username}
+
 }
+
+export default useAuth

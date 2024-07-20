@@ -1,79 +1,88 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Login = (props) => {
-    const [username, setusername] = useState('')
-    const [password, setpassword] = useState('')
-    const [usernameError, setusernameError] = useState('')
-    const [passwordError, setpasswordError] = useState('')
+const Login = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [usernameError, setUsernameError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const onButtonClick = ()=>{
-        setusernameError('')
-        setpasswordError('')
+  useEffect(()=>{
+    if(localStorage.getItem('loggedIn')==='true'){
+      navigate('/')
+    }
+  },[])
 
-        if ('' == username){
-            setusernameError('Please insert your username')
-            return
-        }
+  const onButtonClick = ()=>{
+    setUsernameError('')
+    setPasswordError('')
 
-        if ('' == password){
-            setpasswordError('Please insert your password')
-            return
-        }
-      
-        fetch('login', {
-          method: 'POST',
-          headers: {
-              'Content-Type':'application/json'
-          },
-          body: JSON.stringify({'username': username, 'password': password})
-        })
-        .then((response) => response.json())
-        .then((response)=>{
-          if('False' != response){
-              props.setloggedIn(true)
-              props.setusername(username)
-              navigate('/')
-          } else{
-              window.alert('Wrong username or password')
-          }
-        })
-
+    if (!username){
+        setUsernameError('Please insert your username')
+        return
     }
 
-    return (
-        <div className={'mainContainer'}>
-          <div className={'titleContainer'}>
-            <div>Login</div>
-          </div>
-          <br />
-          <div className={'inputContainer'}>
-            <input
-              value={username}
-              placeholder="Enter your username here"
-              onChange={(ev) => setusername(ev.target.value)}
-              className={'inputBox'}
-            />
-            <label className="errorLabel">{usernameError}</label>
-          </div>
-          <br />
-          <div className={'inputContainer'}>
-            <input
-              value={password}
-              placeholder="Enter your password here"
-              onChange={(ev) => setpassword(ev.target.value)}
-              className={'inputBox'}
-            />
-            <label className="errorLabel">{passwordError}</label>
-          </div>
-          <br />
-          <div className={'inputContainer'}>
-            <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
-          </div>
+    if (!password){
+        setPasswordError('Please insert your password')
+        return
+    }
+  
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+          'Content-Type':'application/json'
+      },
+      body: JSON.stringify({'username': username, 'password': password})
+    })
+    .then((response) => {
+      if(response.ok){
+        return response.json()
+      }
+      else throw new Error("Login error")
+    })
+    .then((data)=>{
+      localStorage.setItem('loggedIn','true')
+      localStorage.setItem('username',username)
+      navigate('/')
+    }) 
+    .catch((error)=>{
+      window.alert('Wrong username or password')
+    })
+  }
+
+  return (
+      <div className={'mainContainer'}>
+        <div className={'titleContainer'}>
+          <div>Login</div>
         </div>
-      )
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={username}
+            placeholder='Enter your username here'
+            onChange={(ev) => setUsername(ev.target.value)}
+            className={'inputBox'}
+          />
+          <label className="errorLabel">{usernameError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input
+            value={password} type='password'
+            placeholder='Enter your password here'
+            onChange={(ev) => setPassword(ev.target.value)}
+            className={'inputBox'}
+          />
+          <label className="errorLabel">{passwordError}</label>
+        </div>
+        <br />
+        <div className={'inputContainer'}>
+          <input className={'inputButton'} type='button' onClick={onButtonClick} value={'Log in'} />
+        </div>
+      </div>
+  )
 }
     
 export default Login
