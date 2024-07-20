@@ -1,0 +1,22 @@
+# dependencies
+/e-commerce/node_modules
+/e-commerce/.pnp
+/e-commerce/.pnp.js
+/api/.venv
+
+# testing
+/e-commerce/coverage
+
+# production
+/e-commerce/build
+
+# misc
+/e-commerce/.DS_Store
+/e-commerce/.env.local
+/e-commerce/.env.development.local
+/e-commerce/.env.test.local
+/e-commerce/.env.production.local
+
+/e-commerce/npm-debug.log*
+/e-commerce/yarn-debug.log*
+/e-commerce/yarn-error.log*
