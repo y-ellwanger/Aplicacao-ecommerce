@@ -42,10 +42,12 @@ def login():
     data = request.get_json()
     if data["password"] and data["username"]:
         user = collection.find_one({"username": data["username"]})
-        if user and bcrypt.check_password_hash(user["password"], data["password"]):
-            session["user_id"] = str(user["_id"])
-            return jsonify({"message": "Login successful"}), 200
-        else: return jsonify({"message": "Invalid username or password"}), 401
+        if user:
+            if bcrypt.check_password_hash(user["password"], data["password"]):
+                session["user_id"] = str(user["_id"])
+                return jsonify({"message": "Login successful"}), 200
+            else: return jsonify({"message": "Invalid username or password"}), 401
+        else: return jsonify({"message": "User does not exist"}), 400
     else: return jsonify({"message": "Username and password required"}), 400
 
 @app.route("/logout")

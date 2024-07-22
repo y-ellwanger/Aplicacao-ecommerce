@@ -40,15 +40,20 @@ const Login = () => {
       if(response.ok){
         return response.json()
       }
-      else throw new Error("Login error")
+      else if(response.status===401){
+        throw new Error('Login error: Incorrect username or password')
+      }
+      else if(response.status===400){
+        throw new Error('Login error: This username does not exist')
+      }
     })
-    .then((data)=>{
+    .then(()=>{
       localStorage.setItem('loggedIn','true')
       localStorage.setItem('username',username)
       navigate('/')
     }) 
     .catch((error)=>{
-      window.alert('Wrong username or password')
+      window.alert(error.message)
     })
   }
 
