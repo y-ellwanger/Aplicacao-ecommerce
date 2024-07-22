@@ -54,7 +54,7 @@ def login():
 def logout():
     if "user_id" in session:
         session.pop("user_id",None)
-        return jsonify({"message": "Logout sucessful"}), 200
+        return jsonify({"message": "Logout successful"}), 200
     else: return jsonify({"message": "User was not logged in"}), 401
 
 

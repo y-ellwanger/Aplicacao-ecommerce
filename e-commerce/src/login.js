@@ -70,7 +70,7 @@ const Login = () => {
             onChange={(ev) => setUsername(ev.target.value)}
             className={'inputBox'}
           />
-          <label className="errorLabel">{usernameError}</label>
+          <label className='errorLabel'>{usernameError}</label>
         </div>
         <br />
         <div className={'inputContainer'}>
