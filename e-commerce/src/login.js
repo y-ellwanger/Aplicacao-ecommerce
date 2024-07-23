@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -38,7 +38,9 @@ const Login = () => {
     })
     .then((response) => {
       if(response.ok){
-        return response.json()
+        localStorage.setItem('loggedIn','true')
+        localStorage.setItem('username',username)
+        navigate('/')
       }
       else if(response.status===401){
         throw new Error('Login error: Incorrect username or password')
@@ -46,11 +48,10 @@ const Login = () => {
       else if(response.status===400){
         throw new Error('Login error: This username does not exist')
       }
-    })
-    .then(()=>{
-      localStorage.setItem('loggedIn','true')
-      localStorage.setItem('username',username)
-      navigate('/')
+      else if (response.status==500){
+        throw new Error('Network error: could not connect to the server')
+      }
+      else throw new Error('Unexpected error ocurred')
     }) 
     .catch((error)=>{
       window.alert(error.message)
