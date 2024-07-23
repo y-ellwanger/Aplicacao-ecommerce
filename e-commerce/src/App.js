@@ -1,8 +1,9 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import Login from './login'
 import Home from './home'
 import Logout from './logout'
+import Register from './register'
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/logout' element={<Logout />} />
+          <Route path='/register' element={<Register />}/>
         </Routes>
       </BrowserRouter>
     </div>

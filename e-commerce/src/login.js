@@ -13,7 +13,7 @@ const Login = () => {
     if(localStorage.getItem('loggedIn')==='true'){
       navigate('/')
     }
-  },[])
+  },[navigate])
 
   const onButtonClick = ()=>{
     setUsernameError('')

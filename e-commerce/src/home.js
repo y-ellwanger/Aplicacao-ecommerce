@@ -9,6 +9,9 @@ const Home = () => {
   const onButtonClick = () => {
     loggedIn? navigate('/logout') : navigate('/login')
   }
+  const onRegisterButtonClick = ()=>{
+    navigate('/register')
+  }
 
   return (
     <div className="mainContainer">
@@ -24,6 +27,12 @@ const Home = () => {
           value={loggedIn ? 'Log out' : 'Log in'}
         />
         {loggedIn && <div>Your username is {username}</div>}
+        {!loggedIn && <input
+          className={'inputButton'}
+          type="button"
+          onClick={onRegisterButtonClick}
+          value={'Register'}
+        />}
       </div>
     </div>
   )

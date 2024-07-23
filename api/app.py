@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from validators import username_verification, email_verification, password_verification
+from validators import *
 import configparser
 
 Config = configparser.ConfigParser()
