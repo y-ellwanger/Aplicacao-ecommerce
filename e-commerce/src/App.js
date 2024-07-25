@@ -4,7 +4,6 @@ import Login from './login'
 import Home from './home'
 import Logout from './logout'
 import Register from './register'
-import './App.css'
 
 function App() {
   return (
