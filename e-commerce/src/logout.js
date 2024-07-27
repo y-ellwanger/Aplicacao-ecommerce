@@ -11,7 +11,8 @@ const Logout = forwardRef((_,ref)=>{
 
   const handleLogout= () =>{
     if (!loggedIn){
-      navigate('/')
+      toggle()
+      navigate('/login')
     }
     else{
       fetch('/logout',{
@@ -23,6 +24,7 @@ const Logout = forwardRef((_,ref)=>{
       .then(()=>{        
         localStorage.removeItem('loggedIn')
         localStorage.removeItem('username')
+        toggle()
         navigate('/')
       })
       .catch((error)=>{

@@ -69,9 +69,7 @@ const Login = () => {
 
   return (
     <>
-      <div className={'titleContainer'}>
-        <div>Login</div>
-      </div>
+      <div>Login</div>
       <br />
       {loginError && <UncontrolledAlert color='danger'>{loginError}</UncontrolledAlert>}
       <Form>

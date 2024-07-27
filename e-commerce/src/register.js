@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input, FormText } from 'reactstrap'
 
 const Register = ()=>{
   const[username, setUsername] = useState('')
@@ -8,6 +9,10 @@ const Register = ()=>{
   const[usernameError, setUsernameError] = useState('')
   const[passwordError, setPasswordError] = useState('')
   const[emailError, setEmailError] = useState('')
+  const[isUsernameValid, setIsUsernameValid] = useState(true)
+  const[isEmailValid, setIsEmailValid] = useState(true)
+  const[isPasswordValid, setIsPasswordValid] = useState(true)
+  const[registerError, setRegisterError] = useState('')
 
   const navigate = useNavigate()
 
@@ -21,17 +26,24 @@ const Register = ()=>{
     setEmailError('')
     setPasswordError('')
     setUsernameError('')
+    setIsEmailValid(true)
+    setIsPasswordValid(true)
+    setIsUsernameValid(true)
+    setRegisterError('')
     
     if (!username){
       setUsernameError('Please insert a username')
+      setIsUsernameValid(false)
       return
     }
     if(!password){
       setPasswordError('Please insert a password')
+      setIsPasswordValid(false)
       return
     }
     if(!email){
       setEmailError('Please insert a email')
+      setIsEmailValid(false)
       return
     }
 
@@ -62,51 +74,55 @@ const Register = ()=>{
       else throw new Error('An unexpected error ocurred')
     })
     .catch((error)=>{
-      window.alert(error.message)
+      setRegisterError(error.message)
     })
 
   }
 
   return(
-    <div className={'mainContainer'}>
-      <div className={'titleContainer'}>
-        <div>Register</div>
-      </div>
-    <br />
-      <div className={'inputContainer'}>
-        <input
-          value={username}
-          placeholder='Enter your username here'
-          onChange={(ev) => setUsername(ev.target.value)}
-          className={'inputBox'}
-        />
-        <label className='errorLabel'>{usernameError}</label>
-      </div>
-    <br />
-      <div className={'inputContainer'}>
-        <input
-          value={email}
-          placeholder='Enter your email here'
-          onChange={(ev) => setEmail(ev.target.value)}
-          className={'inputBox'}
-        />
-        <label className='errorLabel'>{emailError}</label>
-      </div>
-    <br />
-      <div className={'inputContainer'}>
-        <input
-          value={password} type='password'
-          placeholder='Enter your password here'
-          onChange={(ev) => setPassword(ev.target.value)}
-          className={'inputBox'}
-        />
-        <label className="errorLabel">{passwordError}</label>
-      </div>
-    <br />
-      <div className={'inputContainer'}>
-        <input className={'inputButton'} type='button' onClick={onButtonClick} value={'Register'} />
-      </div>
-    </div>
+    <>
+      <div>Register</div>
+      <br />
+      {registerError && <UncontrolledAlert color='danger'>{registerError}</UncontrolledAlert>}
+      <Form>
+        <FormGroup>
+          <Label for='username'>Username</Label>
+          <Input
+            id='username' 
+            placeholder='Insert your username'
+            type='text'
+            onChange={(ev)=>setUsername(ev.target.value)}
+            invalid={!isUsernameValid}
+          />
+          <FormFeedback>{usernameError}</FormFeedback>
+          <FormText>Minimal of 4 characters, only letters and numbers</FormText>
+        </FormGroup>
+        <FormGroup>
+          <Label for='email'>Email</Label>
+          <Input
+            id='email' 
+            placeholder='Insert your email'
+            type='email'
+            onChange={(ev)=>setEmail(ev.target.value)}
+            invalid={!isEmailValid}
+          />
+          <FormFeedback>{emailError}</FormFeedback>
+        </FormGroup>
+        <FormGroup>
+          <Label for='password'>Password</Label>
+          <Input 
+            id='password'
+            placeholder='Insert your password'
+            type='password'
+            onChange={(ev)=>setPassword(ev.target.value)}
+            invalid={!isPasswordValid}
+          />
+          <FormFeedback>{passwordError}</FormFeedback>
+          <FormText>Minimal of 6 characters</FormText>
+        </FormGroup>
+        <Button onClick={onButtonClick}>Register</Button>
+      </Form>
+    </>
   )
 
 }
