@@ -1,5 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import Login from './login'
 import Home from './home'
 import Logout from './logout'
