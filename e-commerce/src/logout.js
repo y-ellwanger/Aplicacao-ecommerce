@@ -1,13 +1,18 @@
-import { useEffect } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
-const Logout = ()=>{
+const Logout = forwardRef((_,ref)=>{
+  const [modal, setModal] = useState(false)
   const loggedIn = localStorage.getItem('loggedIn') === 'true'
   const navigate = useNavigate()
 
-  useEffect(()=>{
+  const toggle = () => setModal(!modal)
+
+  const handleLogout= () =>{
     if (!loggedIn){
-      navigate('/')
+      toggle()
+      navigate('/login')
     }
     else{
       fetch('/logout',{
@@ -19,15 +24,32 @@ const Logout = ()=>{
       .then(()=>{        
         localStorage.removeItem('loggedIn')
         localStorage.removeItem('username')
+        toggle()
         navigate('/')
       })
       .catch((error)=>{
         window.alert(error.message)
       })
     }
-    },[loggedIn,navigate])
+  }
 
-  return null
+  useImperativeHandle(ref,()=>({
+    openModal: ()=>setModal(true)
+  }))
+  
 
-}
+  return(
+    <>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Logout?</ModalHeader>
+        <ModalBody>Do you want to logout from your account?</ModalBody>
+        <ModalFooter>
+          <Button color='danger' onClick={handleLogout}>Confirm</Button>
+          <Button color='secondary' onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    </>
+  )
+})
+
 export default Logout
