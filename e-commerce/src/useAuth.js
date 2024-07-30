@@ -10,8 +10,9 @@ const useAuth = () =>{
     setLoggedIn(storedLoggedIn)
     setUsername(storedUsername || '')
   }, [])
+  const handleLogout = ()=>setLoggedIn(false)
 
-  return {loggedIn, username}
+  return {loggedIn, username, handleLogout}
 
 }
 

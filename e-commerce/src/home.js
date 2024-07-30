@@ -1,17 +1,18 @@
-import React, {useRef} from 'react'
+import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuth from './useAuth'
 import Logout from './logout'
 import { Button } from 'reactstrap'
 
 const Home = () => {
-  const {loggedIn, username} = useAuth()
-  const logout = useRef()
+  const [isModalOpen,setIsModalOpen] = useState(false)
+  const {loggedIn, username, handleLogout} = useAuth()
   const navigate = useNavigate()
 
-  const onLoginButtonClick = () => {
-    loggedIn? logout.current.openModal() : navigate('/login')
-  }
+  const toggleModal = ()=> setIsModalOpen(!isModalOpen)
+
+  const onLoginButtonClick = () => loggedIn? toggleModal() : navigate('/login')
+
   const onRegisterButtonClick = ()=>{
     navigate('/register')
   }
@@ -24,13 +25,7 @@ const Home = () => {
       <div>This is the home page.</div>
       <div className={'buttonContainer'}>
         <Button color='primary' onClick={onLoginButtonClick}>{loggedIn? 'Log out': 'Login'}</Button>
-        <Logout ref={logout}/>
-        <input
-          className={'inputButton'}
-          type="button"
-          onClick={onLoginButtonClick}
-          value={loggedIn ? 'Log out' : 'Log in'}
-        />
+        <Logout isOpen={isModalOpen} toggle={toggleModal} onLogout={handleLogout}/>
         {loggedIn && <div>Your username is {username}</div>}
         {!loggedIn && <Button color='primary' onClick={onRegisterButtonClick}>Register</Button>}
       </div>
