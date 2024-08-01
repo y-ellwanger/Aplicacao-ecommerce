@@ -38,8 +38,8 @@ const NavBar = () => {
 								{username}
 							</DropdownToggle>
 							<DropdownMenu end>
-								<DropdownItem>Option 1</DropdownItem>
-								<DropdownItem>Option 2</DropdownItem>
+								<DropdownItem>Profile</DropdownItem>
+								<DropdownItem>My orders</DropdownItem>
 								<DropdownItem divider />
 								<DropdownItem style={{color: 'red'}} onClick={toogleModal}>Logout</DropdownItem>
 								<Logout isOpen={isModalOpen} toggle={toogleModal}/>
