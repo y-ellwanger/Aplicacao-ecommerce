@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { useAuth } from "../context/authContext";
 
-const Logout = ({isOpen, toggle, onLogout})=>{
+const Logout = ({isOpen, toggle})=>{
   const loggedIn = localStorage.getItem('loggedIn') === 'true'
   const navigate = useNavigate()
+  const {handleLogout} = useAuth()
 
-  const handleLogout= () =>{
+  const performLogout= () =>{
     if (!loggedIn){
       toggle()
       navigate('/login')
@@ -19,10 +21,8 @@ const Logout = ({isOpen, toggle, onLogout})=>{
       })
       .then((response)=>{
         if(response.status===500) throw new Error('Failed to logout: Could not connect to the server')        
-        localStorage.removeItem('loggedIn')
-        localStorage.removeItem('username')
         toggle()
-        onLogout()
+        handleLogout()
         navigate('/')
       })
       .catch((error)=>{
@@ -37,7 +37,7 @@ const Logout = ({isOpen, toggle, onLogout})=>{
         <ModalHeader toggle={toggle}>Logout?</ModalHeader>
         <ModalBody>Do you want to logout from your account?</ModalBody>
         <ModalFooter>
-          <Button color='danger' onClick={handleLogout}>Confirm</Button>
+          <Button color='danger' onClick={performLogout}>Confirm</Button>
           <Button color='secondary' onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

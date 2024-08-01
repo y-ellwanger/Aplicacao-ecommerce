@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input } from 'reactstrap'
+import { useAuth } from './context/authContext'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -10,6 +11,7 @@ const Login = () => {
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
   const [loginError, setLoginError] = useState('')
+  const {handleLogin} = useAuth()
 
   const navigate = useNavigate()
 
@@ -47,8 +49,7 @@ const Login = () => {
     })
     .then((response) => {
       if(response.ok){
-        localStorage.setItem('loggedIn','true')
-        localStorage.setItem('username',username)
+        handleLogin(username)
         navigate('/')
       }
       else if(response.status===401){
