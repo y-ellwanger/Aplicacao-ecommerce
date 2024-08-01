@@ -37,11 +37,11 @@ const NavBar = () => {
 							<DropdownToggle nav caret>
 								{username}
 							</DropdownToggle>
-							<DropdownMenu right>
+							<DropdownMenu end>
 								<DropdownItem>Option 1</DropdownItem>
 								<DropdownItem>Option 2</DropdownItem>
 								<DropdownItem divider />
-								<DropdownItem onClick={toogleModal}>Logout</DropdownItem>
+								<DropdownItem style={{color: 'red'}} onClick={toogleModal}>Logout</DropdownItem>
 								<Logout isOpen={isModalOpen} toggle={toogleModal}/>
 							</DropdownMenu>
 						</UncontrolledDropdown>}
