@@ -73,7 +73,7 @@ const Login = () => {
     <div className='login-container'>
       <Card className='login-card'>
         <CardBody>
-          <CardTitle tag='h5'>Login</CardTitle>
+          <CardTitle tag='h5' className='login-title'>Login</CardTitle>
           {loginError && <UncontrolledAlert color='danger'>{loginError}</UncontrolledAlert>}
           <Form>
             <FormGroup>

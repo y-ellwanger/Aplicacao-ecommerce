@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input, FormText } from 'reactstrap'
+import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input, FormText, Card, CardBody, CardTitle } from 'reactstrap'
+import './style/register.css'
 
 const Register = ()=>{
   const[username, setUsername] = useState('')
@@ -80,49 +81,52 @@ const Register = ()=>{
   }
 
   return(
-    <>
-      <div>Register</div>
-      <br />
-      {registerError && <UncontrolledAlert color='danger'>{registerError}</UncontrolledAlert>}
-      <Form>
-        <FormGroup>
-          <Label for='username'>Username</Label>
-          <Input
-            id='username' 
-            placeholder='Insert your username'
-            type='text'
-            onChange={(ev)=>setUsername(ev.target.value)}
-            invalid={!isUsernameValid}
-          />
-          <FormFeedback>{usernameError}</FormFeedback>
-          <FormText>Minimal of 4 characters, only letters and numbers</FormText>
-        </FormGroup>
-        <FormGroup>
-          <Label for='email'>Email</Label>
-          <Input
-            id='email' 
-            placeholder='Insert your email'
-            type='email'
-            onChange={(ev)=>setEmail(ev.target.value)}
-            invalid={!isEmailValid}
-          />
-          <FormFeedback>{emailError}</FormFeedback>
-        </FormGroup>
-        <FormGroup>
-          <Label for='password'>Password</Label>
-          <Input 
-            id='password'
-            placeholder='Insert your password'
-            type='password'
-            onChange={(ev)=>setPassword(ev.target.value)}
-            invalid={!isPasswordValid}
-          />
-          <FormFeedback>{passwordError}</FormFeedback>
-          <FormText>Minimal of 6 characters</FormText>
-        </FormGroup>
-        <Button onClick={onButtonClick}>Register</Button>
-      </Form>
-    </>
+    <div className='register-container'>
+      <Card className='register-card'>
+        <CardBody>
+          <CardTitle tag='h5' className='register-title'>Register</CardTitle>
+          {registerError && <UncontrolledAlert color='danger'>{registerError}</UncontrolledAlert>}
+          <Form>
+            <FormGroup>
+              <Label for='username'>Username</Label>
+              <Input
+                id='username' 
+                placeholder='Insert your username'
+                type='text'
+                onChange={(ev)=>setUsername(ev.target.value)}
+                invalid={!isUsernameValid}
+              />
+              <FormFeedback>{usernameError}</FormFeedback>
+              <FormText>Minimal of 4 characters, only letters and numbers</FormText>
+            </FormGroup>
+            <FormGroup>
+              <Label for='email'>Email</Label>
+              <Input
+                id='email' 
+                placeholder='Insert your email'
+                type='email'
+                onChange={(ev)=>setEmail(ev.target.value)}
+                invalid={!isEmailValid}
+              />
+              <FormFeedback>{emailError}</FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Label for='password'>Password</Label>
+              <Input 
+                id='password'
+                placeholder='Insert your password'
+                type='password'
+                onChange={(ev)=>setPassword(ev.target.value)}
+                invalid={!isPasswordValid}
+              />
+              <FormFeedback>{passwordError}</FormFeedback>
+              <FormText>Minimal of 6 characters</FormText>
+            </FormGroup>
+            <Button color='primary' onClick={onButtonClick}>Register</Button>
+          </Form>
+        </CardBody>    
+      </Card>
+    </div>
   )
 
 }
