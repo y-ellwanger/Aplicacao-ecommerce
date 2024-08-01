@@ -8,3 +8,5 @@ def password_verification(password):
 
 def email_verification(email):
     return re.match(r"[^@]+@[^@]+\.[^@]+", email) is not None
+
+ALLOWED_USER_FIELDS = ["username","password","email"]

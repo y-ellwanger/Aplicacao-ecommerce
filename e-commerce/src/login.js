@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input } from 'reactstrap'
+import { UncontrolledAlert, Button, Form, FormGroup, Label, FormFeedback, Input, Card, CardBody, CardTitle } from 'reactstrap'
+import { useAuth } from './context/authContext'
+import './style/login.css'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -10,6 +12,7 @@ const Login = () => {
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
   const [loginError, setLoginError] = useState('')
+  const {handleLogin} = useAuth()
 
   const navigate = useNavigate()
 
@@ -47,8 +50,7 @@ const Login = () => {
     })
     .then((response) => {
       if(response.ok){
-        localStorage.setItem('loggedIn','true')
-        localStorage.setItem('username',username)
+        handleLogin(username)
         navigate('/')
       }
       else if(response.status===401){
@@ -68,36 +70,39 @@ const Login = () => {
   }
 
   return (
-    <>
-      <div>Login</div>
-      <br />
-      {loginError && <UncontrolledAlert color='danger'>{loginError}</UncontrolledAlert>}
-      <Form>
-        <FormGroup>
-          <Label for='username'>Username</Label>
-          <Input
-            id='username' 
-            placeholder='Insert your username'
-            type='text'
-            onChange={(ev)=>setUsername(ev.target.value)}
-            invalid={!isUsernameValid}
-          />
-          <FormFeedback>{usernameError}</FormFeedback>
-        </FormGroup>
-        <FormGroup>
-          <Label for='password'>Password</Label>
-          <Input 
-            id='password'
-            placeholder='Insert your password'
-            type='password'
-            onChange={(ev)=>setPassword(ev.target.value)}
-            invalid={!isPasswordValid}
-          />
-          <FormFeedback>{passwordError}</FormFeedback>
-        </FormGroup>
-        <Button onClick={onButtonClick}>Login</Button>
-      </Form>
-    </>
+    <div className='login-container'>
+      <Card className='login-card'>
+        <CardBody>
+          <CardTitle tag='h5' className='login-title'>Login</CardTitle>
+          {loginError && <UncontrolledAlert color='danger'>{loginError}</UncontrolledAlert>}
+          <Form>
+            <FormGroup>
+              <Label for='username'>Username</Label>
+              <Input
+                id='username' 
+                placeholder='Insert your username'
+                type='text'
+                onChange={(ev)=>setUsername(ev.target.value)}
+                invalid={!isUsernameValid}
+              />
+              <FormFeedback>{usernameError}</FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Label for='password'>Password</Label>
+              <Input 
+                id='password'
+                placeholder='Insert your password'
+                type='password'
+                onChange={(ev)=>setPassword(ev.target.value)}
+                invalid={!isPasswordValid}
+              />
+              <FormFeedback>{passwordError}</FormFeedback>
+            </FormGroup>
+            <Button color='primary' onClick={onButtonClick}>Sign in</Button>
+          </Form>
+        </CardBody>
+      </Card>
+    </div>
   )
 }
     

@@ -1,15 +1,13 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { useAuth } from "../context/authContext";
 
-const Logout = forwardRef((_,ref)=>{
-  const [modal, setModal] = useState(false)
+const Logout = ({isOpen, toggle})=>{
   const loggedIn = localStorage.getItem('loggedIn') === 'true'
   const navigate = useNavigate()
+  const {handleLogout} = useAuth()
 
-  const toggle = () => setModal(!modal)
-
-  const handleLogout= () =>{
+  const performLogout= () =>{
     if (!loggedIn){
       toggle()
       navigate('/login')
@@ -21,10 +19,10 @@ const Logout = forwardRef((_,ref)=>{
             'Content-Type': 'application/json'
         }
       })
-      .then(()=>{        
-        localStorage.removeItem('loggedIn')
-        localStorage.removeItem('username')
+      .then((response)=>{
+        if(response.status===500) throw new Error('Failed to logout: Could not connect to the server')        
         toggle()
+        handleLogout()
         navigate('/')
       })
       .catch((error)=>{
@@ -33,23 +31,18 @@ const Logout = forwardRef((_,ref)=>{
     }
   }
 
-  useImperativeHandle(ref,()=>({
-    openModal: ()=>setModal(true)
-  }))
-  
-
   return(
     <>
-      <Modal isOpen={modal} toggle={toggle}>
+      <Modal isOpen={isOpen} toggle={toggle}>
         <ModalHeader toggle={toggle}>Logout?</ModalHeader>
         <ModalBody>Do you want to logout from your account?</ModalBody>
         <ModalFooter>
-          <Button color='danger' onClick={handleLogout}>Confirm</Button>
+          <Button color='danger' onClick={performLogout}>Confirm</Button>
           <Button color='secondary' onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </>
   )
-})
+}
 
 export default Logout

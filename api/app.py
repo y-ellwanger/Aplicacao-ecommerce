@@ -10,11 +10,11 @@ Config = configparser.ConfigParser()
 Config.read("config.ini")
 client_address = Config["Database"]["client_address"]
 db_name = Config["Database"]["db_name"]
-collection_name = Config["Database"]["collection_name"]
+user_collection_name = Config["Database"]["user_collection_name"]
 
 client = MongoClient(client_address)
 db = client[db_name]
-collection = db[collection_name]
+user_collection = db[user_collection_name]
 
 app = Flask(__name__)
 app.secret_key= "chave secreta"
@@ -28,6 +28,8 @@ def home():
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
+    if set(data.keys()) - ALLOWED_USER_FIELDS:
+        return jsonify({"message": "Extra fields not allowed"}), 400
     if data["password"] and data["username"] and data["email"]:
         if not username_verification(data["username"]):
             return jsonify({"message": "Invalid username given"}), 400
@@ -35,10 +37,12 @@ def register():
             return jsonify({"message": "Invalid password given"}), 400
         if not email_verification(data["email"]):
             return jsonify({"message": "Invalid email given"}), 400
-        if collection.count_documents({"username": data["username"]})==0:
+        if user_collection.count_documents({"username": data["username"]})==0:
             try:
                 data["password"] = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
-                collection.insert_one(data)
+                data["orders"] = []
+                data["user_type"] = "user"
+                user_collection.insert_one(data)
                 return jsonify({"message": "User registered successfully"}), 200
             except Exception as error:
                 return jsonify({"message": f"Could not connect to the database: {str(error)}"}), 500
@@ -49,7 +53,7 @@ def register():
 def login():
     data = request.get_json()
     if data["password"] and data["username"]:
-        user = collection.find_one({"username": data["username"]})
+        user = user_collection.find_one({"username": data["username"]})
         if user:
             if bcrypt.check_password_hash(user["password"], data["password"]):
                 session["user_id"] = str(user["_id"])
